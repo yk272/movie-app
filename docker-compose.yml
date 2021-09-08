@@ -1,0 +1,26 @@
+version: "3.9" 
+services:
+  mongodb:
+    network_mode: host
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - mongodb-data:/data/db
+  server:
+    network_mode: host
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    container_name: movie-server
+    depends_on:
+      - mongodb
+  client:
+    network_mode: host
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    container_name: movie-client
+    depends_on:
+      - server
+volumes:
+  mongodb-data: {}
